@@ -25,11 +25,13 @@ void delay(void)
 {
 	for(int32_t i=0; i<500000; i++);
 }
+#define BTN_PRESSED  1
 
 int main(void)
 {
-	GPIO_Handle_t GpioLed;
+	GPIO_Handle_t GpioLed, GPIOBtn;
 
+	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
 	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
 	GpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
 	GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
@@ -37,17 +39,43 @@ int main(void)
 	GpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
 	GpioLed.pGPIOx = GPIOD;
 
-
 	GPIO_PeriClockControl(GPIOD, ENABLE);
 
-	//GPIO_Init(&GpioLed);
+	GPIO_Init(&GpioLed);
+///////////////////////////////////////////////////////////////////////////////
 
-	while(1)
-	{
-		GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
-		delay();
-	}
+	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_0;
+	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IT_FT;
+	//GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_LOW;
+	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	GPIOBtn.pGPIOx = GPIOA;
+
+
+	GPIO_PeriClockControl(GPIOA, ENABLE);
+
+	GPIO_Init(&GPIOBtn);
+
+
+	//IRQ configurations
+	//GPIO_IRQITPriorityConfig(IRQ_NO_EXTI9_5, NVIC_IRQ_PRIO15);
+	GPIO_IRQITConfig(IRQ_NO_EXTI0, ENABLE);
+
+	while(1);
 
     /* Loop forever */
 	return 0;
 }
+
+void EXTI0_IRQHandler(void)
+{
+
+	GPIO_IRQHandling(GPIO_PIN_NO_0);
+
+	GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
+
+}
+
+
+
+
+

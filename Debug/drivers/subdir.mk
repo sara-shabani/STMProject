@@ -3,7 +3,7 @@
 # Toolchain: GNU Tools for STM32 (9-2020-q2-update)
 ################################################################################
 
-USER_OBJS :=
+# Add inputs and outputs from these tool invocations to the build variables 
 
-LIBS :=
+# Each subdirectory must supply rules for building sources it contributes
 

@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
 ################################################################################
 
 -include ../makefile.init
@@ -9,6 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include drivers/Src/subdir.mk
 -include Startup/subdir.mk
 -include Src/subdir.mk
 -include objects.mk
@@ -33,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := stm32f4xx_drivers
+BUILD_ARTIFACT_NAME := stm32f407xx_drivers
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-stm32f4xx_drivers.elf \
-
-MAP_FILES += \
-stm32f4xx_drivers.map \
+stm32f407xx_drivers.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-stm32f4xx_drivers.list \
+stm32f407xx_drivers.list \
+
+OBJCOPY_BIN += \
+stm32f407xx_drivers.bin \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: stm32f4xx_drivers.elf secondary-outputs
+main-build: stm32f407xx_drivers.elf secondary-outputs
 
 # Tool invocations
-stm32f4xx_drivers.elf stm32f4xx_drivers.map: $(OBJS) $(USER_OBJS) /home/sara/Documents/Embedded\ C/my_workspace/MCU_NAME/stm32f4xx_drivers/STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stm32f4xx_drivers.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/sara/Documents/Embedded C/my_workspace/MCU_NAME/stm32f4xx_drivers/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f4xx_drivers.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stm32f407xx_drivers.elf: $(OBJS) $(USER_OBJS) /home/sara/STM32CubeIDE/workspace_1.8.0/stm32f4xx_drivers/stm32f407xx_drivers/STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "stm32f407xx_drivers.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/sara/STM32CubeIDE/workspace_1.8.0/stm32f4xx_drivers/stm32f407xx_drivers/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f407xx_drivers.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,17 +70,22 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-stm32f4xx_drivers.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "stm32f4xx_drivers.list"
+stm32f407xx_drivers.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "stm32f407xx_drivers.list"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+stm32f407xx_drivers.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "stm32f407xx_drivers.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout stm32f4xx_drivers.elf stm32f4xx_drivers.list stm32f4xx_drivers.map
+	-$(RM) default.size.stdout stm32f407xx_drivers.bin stm32f407xx_drivers.elf stm32f407xx_drivers.list
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

@@ -25,10 +25,11 @@ void delay(void)
 {
 	for(int32_t i=0; i<500000; i++);
 }
+#define BTN_PRESSED  1
 
 int main(void)
 {
-	GPIO_Handle_t GpioLed;
+	GPIO_Handle_t GpioLed, GPIOBtn;
 
 	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
 	GpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
@@ -37,15 +38,30 @@ int main(void)
 	GpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
 	GpioLed.pGPIOx = GPIOD;
 
-
 	GPIO_PeriClockControl(GPIOD, ENABLE);
 
-	//GPIO_Init(&GpioLed);
+	GPIO_Init(&GpioLed);
+
+
+	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_0;
+	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IN;
+	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	GPIOBtn.pGPIOx = GPIOA;
+
+
+	GPIO_PeriClockControl(GPIOA, ENABLE);
+
+	GPIO_Init(&GPIOBtn);
 
 	while(1)
 	{
-		GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
-		delay();
+		if(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0) == BTN_PRESSED)
+		{
+			delay();
+			GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
+		}
+
 	}
 
     /* Loop forever */
