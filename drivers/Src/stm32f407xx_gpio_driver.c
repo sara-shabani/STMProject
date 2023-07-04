@@ -37,6 +37,10 @@ void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t ENDi)
 		{
 			GPIOD_PLCK_EN();
 		}
+		else if (GPIOB == pGPIOx)
+		{
+			GPIOB_PLCK_EN();
+		}
 		/*TODO : complete for other ports*/
 	}
 	else
@@ -56,6 +60,9 @@ void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t ENDi)
 void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 {
 	uint32_t temp = 0;
+
+	GPIO_PeriClockControl(pGPIOHandle->pGPIOx, ENABLE);
+
 	//1. Configure the mode of GPIO pin
 	if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_ANALOG)
 	{/*Start of: If the mode is less than analog , then it is non interrupt mode*/
